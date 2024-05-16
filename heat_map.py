@@ -29,7 +29,8 @@ ax.set_title('Traffic Flow Heatmap with Scaled Probe Counts')
 ax.set_xlabel('Longitude')
 ax.set_ylabel('Latitude')
 plt.show()
+fig.savefig('traffic_flow_heatmap.png', dpi=300, bbox_inches='tight')
 
 
-traffic_data.to_csv('traffic_data.csv', index=False)
-gdf.to_file("geojson_Delhi_Traffic_Data_-_Oct_2022_scaled.geojson", driver='GeoJSON')
+# traffic_data.to_csv('traffic_data.csv', index=False)
+# gdf.to_file("geojson_Delhi_Traffic_Data_-_Oct_2022_scaled.geojson", driver='GeoJSON')

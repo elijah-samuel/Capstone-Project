@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 
-
 start_time = time.time()
 
 # Read GeoJSON data into a GeoDataFrame
@@ -20,23 +19,23 @@ merged_data.dropna(subset=['scaledProbeCount'], inplace=True)
 # Create empty graph
 G = nx.Graph()
 
-# Add nodes and edges with weights based on scaled probe counts
+# Add nodes without edges based on the first tuple of coords
 for _, row in merged_data.iterrows():
     coords = row['geometry'].coords  # Extract coordinates from LineString geometry
-    for i in range(len(coords)-1):
-        start_node = coords[i]  # Start node of the edge
-        end_node = coords[i+1]  # End node of the edge
-        weight = row['scaledProbeCount']  # Weight of the edge
-        G.add_edge(start_node, end_node, weight=weight)
-        
-nx.write_graphml(G, 'metro_network.graphml')
+    start_node = coords[0]  # Start node of the edge
+    scaled_probe_count = row['scaledProbeCount']
+    G.add_node(start_node, scaled_probe_count=scaled_probe_count)
 
-# # Visualize network subset
+# Save the graph
+nx.write_graphml(G, 'traffic_network_points.graphml')
+
+# # Draw the network
 # plt.figure(figsize=(10, 10))
-# pos = nx.spring_layout(G)  # Define layout for nodes
-# nx.draw(G, pos, with_labels=False, node_size=5, node_color='skyblue', edge_color='grey', width=0.5)  # Draw nodes and edges without labels
-# plt.title('Metro Line Network with Weights from Traffic Data (Top 5000 Segments)')
+# pos = nx.spring_layout(G)  # or any other layout algorithm
+# nx.draw(G, pos, with_labels=False, node_size=0.5, node_color='skyblue')
+# plt.title('Traffic Network (Nodes Only)')
 # plt.show()
+# plt.savefig('traffic_network_original_points_plot.png')
 
 end_time = time.time()
 
